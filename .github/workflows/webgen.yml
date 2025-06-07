@@ -1,4 +1,4 @@
-name: Generate Corvette HTML
+name: Generate HTML
 
 on:
   workflow_dispatch:
@@ -44,12 +44,12 @@ jobs:
 
       - name: Extract HTML from response
         run: |
-          jq -r '.choices[0].message.content' response.json > corvette.html
+          jq -r '.choices[0].message.content' response.json > index.html
 
       - name: Commit and push generated HTML
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add corvette.html
-          git commit -m "Auto-generate corvette.html using OpenAI API" || echo "No changes to commit"
+          git add index.html
+          git commit -m "Auto-generate index.html using OpenAI API" || echo "No changes to commit"
           git push
