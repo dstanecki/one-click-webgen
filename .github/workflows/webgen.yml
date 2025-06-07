@@ -1,7 +1,12 @@
 name: Generate Corvette HTML
 
 on:
-  workflow_dispatch: # Allows manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: "Describe the type of HTML page to generate"
+        required: true
+        default: "Write a full HTML document for a very simple plaintext-style website that describes the C8 Corvette Z06. Do not include any CSS or JavaScript. Use only basic HTML tags like <html>, <head>, <body>, <h1>, <p>. Output only the HTML code."
 
 jobs:
   generate-html:
@@ -19,7 +24,7 @@ jobs:
 
       - name: Call OpenAI API to generate HTML
         run: |
-          curl https://api.openai.com/v1/chat/completions \
+          curl --fail --show-error https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
             -d '{
@@ -31,7 +36,7 @@ jobs:
                 },
                 {
                   "role": "user",
-                  "content": "Write a full HTML document for a very simple plaintext-style website that describes the C8 Corvette Z06. Do not include any CSS or JavaScript. Use only basic HTML tags like <html>, <head>, <body>, <h1>, <p>. Output only the HTML code."
+                  "content": "${{ github.event.inputs.prompt }}"
                 }
               ],
               "temperature": 0.2
