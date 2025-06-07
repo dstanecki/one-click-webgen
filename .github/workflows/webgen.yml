@@ -46,10 +46,19 @@ jobs:
         run: |
           jq -r '.choices[0].message.content' response.json > index.html
 
-      - name: Commit and push generated HTML
+      - name: Deploy to GitHub Pages
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          git commit -m "Auto-generate index.html using OpenAI API" || echo "No changes to commit"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Clone the gh-pages branch or create it
+          git clone --branch gh-pages --single-branch https://github.com/${{ github.repository }} gh-pages
+          cd gh-pages
+
+          # Clean old files, add new one
+          rm -rf *
+          cp ../index.html .
+
+          git add .
+          git commit -m "Deploy new HTML page from workflow" || echo "No changes to commit"
           git push
