@@ -6,7 +6,7 @@ on:
       prompt:
         description: "Describe the type of HTML page to generate"
         required: true
-        default: "Write a full HTML document for a very simple plaintext-style website that describes the C8 Corvette Z06. Do not include any CSS or JavaScript. Use only basic HTML tags like <html>, <head>, <body>, <h1>, <p>. Output only the HTML code."
+        default: "Generate a very simple plaintext-style website that describes the rumored Lexus LFR."
 
 jobs:
   generate-html:
@@ -36,7 +36,7 @@ jobs:
                 },
                 {
                   "role": "user",
-                  "content": "${{ github.event.inputs.prompt }}"
+                  "content": "Write a full HTML document for the following: ${{ github.event.inputs.prompt }}  Do not include any CSS or JavaScript. Use only basic HTML tags like <html>, <head>, <body>, <h1>, <p>. Output only the HTML code"
                 }
               ],
               "temperature": 0.2
