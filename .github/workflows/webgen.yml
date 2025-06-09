@@ -3,10 +3,13 @@ name: Generate HTML
 on:
   workflow_dispatch:
     inputs:
+      art: 
+        description: "Describe a piece of AI-generated art to include in the site"
+        default: "The rumored 2026 Lexus LFR."
       prompt:
         description: "Describe the type of HTML page to generate"
         required: true
-        default: "Generate a very simple plaintext-style website that describes the rumored Lexus LFR."
+        default: "Give info about the rumored Lexus LFR."
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
