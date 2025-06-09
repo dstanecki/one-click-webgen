@@ -53,7 +53,12 @@ jobs:
           git add index.html
           git commit -m "Auto-generate index.html using OpenAI API" || echo "No changes to commit"
           git push
-
+          
+  build:
+    runs-on: ubuntu-atest
+    steps:
+      - name: Checkout
+        uses: actions/checkout/@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Build with Jekyll
