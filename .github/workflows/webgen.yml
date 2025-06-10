@@ -1,4 +1,4 @@
-name: Generate HTML
+name: Generate website
 
 on:
   workflow_dispatch:
