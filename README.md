@@ -22,7 +22,7 @@ Before using this project, ensure the following:
 
 ## 🛠️ How It Works
 
-1. You enter a prompt to generate AI art and a prompt to generate the website content. Optionally, a prompt to describe what the visual theme should be.
+1. You enter a prompt to generate AI art, a prompt to generate the website text content, and a prompt to describe what the visual theme should be.
 2. GitHub Actions triggers on manual dispatch.
 3. The pipeline uses the OpenAI API to generate PNG images and HTML docs with internal CSS.
 4. The generated files are committed and pushed.
