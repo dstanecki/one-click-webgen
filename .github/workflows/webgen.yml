@@ -5,6 +5,7 @@ on:
     inputs:
       art: 
         description: "Describe a piece of AI-generated art to include in the site"
+        required: true
         default: "The 2026 Lexus LFR driving on a mountain road."
       prompt:
         description: "Describe the type of HTML page to generate"
@@ -25,7 +26,6 @@ permissions:
 concurrency:
   group: "pages"
   cancel-in-progress: false
-
 
 env:
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -116,13 +116,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload entire repository
           path: '.'
+          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
