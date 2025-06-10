@@ -5,11 +5,11 @@ on:
     inputs:
       art: 
         description: "Describe a piece of AI-generated art to include in the site"
-        default: "The Lotus Emira driving on a mountain road."
+        default: "The 2026 Lexus LFR driving on a mountain road."
       prompt:
         description: "Describe the type of HTML page to generate"
         required: true
-        default: "Describe the Lotus Emira in depth. Compare it to other cars in its segment."
+        default: "Give information on what we know or what is speculated about the upcoming Lexus LFR, including information about the engine, transmission, etc."
       theme: 
         description: "Describe the color scheme and theme for generating CSS"
         default: "Modern and minimalist, similar to Apple's theme"
@@ -87,7 +87,7 @@ jobs:
               },
               {
                 "role": "user",
-                "content": "Write a full HTML document for the following: Give info about the rumored Lexus LFR speculations, like engine, transmission, price, etc. Include an <img src=\"image.png\" alt=\"AI-generated art\"> somewhere in the body. Add an internal <style> block in the <head> using the following design theme: Modern and minimalist, similar to Apple's theme. The CSS should include styling for layout and typography. Do not include JavaScript. Output only the HTML code."
+                "content": "Write a full HTML document for the following: ${{ github.event.inputs.prompt }} Include an <img src=\"image.png\" alt=\"AI-generated art\"> somewhere in the body. Add an internal <style> block in the <head> using the following design theme: ${{ github.event.inputs.theme }}. The CSS should include styling for layout and typography. Do not include JavaScript. Output only the HTML code."
               }
             ],
             "temperature": 0.2
