@@ -14,7 +14,8 @@
 Before using this project, ensure the following:
 
 - GitHub Pages is enabled for your repository.
-- You have an OpenAI account with API access AND your organization is verified (required to use the OpenAI protected engines, in this case that's the image generation engine)
+- You have an OpenAI account with API access (requires purchase of API credits)
+- Your OpenAI organization is verified (required to use the OpenAI protected engines, in this case that's the image generation engine)
 - Your OpenAI API key is stored in GitHub Actions secrets:
   - Go to your repository > Settings > Secrets and variables > Actions.
   - Add a new secret named `OPENAI_API_KEY`.
