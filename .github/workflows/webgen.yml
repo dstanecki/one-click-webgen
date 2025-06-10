@@ -5,11 +5,11 @@ on:
     inputs:
       art: 
         description: "Describe a piece of AI-generated art to include in the site"
-        default: "The 2026 Lexus LFR driving on a mountain road."
+        default: "The Lotus Emira driving on a mountain road."
       prompt:
         description: "Describe the type of HTML page to generate"
         required: true
-        default: "Give info about the rumored Lexus LFR speculations, like engine, transmission, price, etc."
+        default: "Describe the Lotus Emira in depth. Compare it to other cars in its segment."
       theme: 
         description: "Describe the color scheme and theme for generating CSS"
         default: "Modern and minimalist, similar to Apple's theme"
