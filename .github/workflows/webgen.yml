@@ -9,7 +9,7 @@ on:
       prompt:
         description: "Describe the type of HTML page to generate"
         required: true
-        default: "Give info about the current Lexus LFR rumors."
+        default: "Give info about the rumored Lexus LFR speculations, like engine, transmission, price, etc."
       theme: 
         description: "Describe the color scheme and theme for generating CSS"
         default: "Modern and minimalist, similar to Apple's theme"
