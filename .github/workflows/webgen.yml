@@ -83,11 +83,11 @@ jobs:
             "messages": [
               {
                 "role": "system",
-                "content": "You are a helpful assistant that writes clean HTML code. Only return valid HTML without any explanation."
+                "content": "You are a helpful assistant that gets data from the internet and writes clean, detailed, and informative HTML code. Only return valid HTML without any explanation."
               },
               {
                 "role": "user",
-                "content": "Write a full HTML document for the following: ${{ github.event.inputs.prompt }} Include an <img src=\"image.png\" alt=\"AI-generated art\"> somewhere in the body. Add an internal <style> block in the <head> using the following design theme: ${{ github.event.inputs.theme }}. The CSS should include styling for layout and typography. Do not include JavaScript. Output only the HTML code."
+                "content": "Write a full HTML document based on the following prompt: ${{ github.event.inputs.prompt }} Go in detail based on online sources. Include an <img src=\"image.png\" alt=\"AI-generated art\"> somewhere in the body. Add an internal <style> block in the <head> using the following design theme: ${{ github.event.inputs.theme }}. The CSS should include styling for layout and typography. Do not include JavaScript. Output only the HTML code."
               }
             ],
             "temperature": 0.2
