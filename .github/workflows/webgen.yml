@@ -77,20 +77,22 @@ jobs:
           curl --fail --show-error https://api.openai.com/v1/chat/completions \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -H "Content-Type: application/json" \
-            -d '{
-              "model": "gpt-4",
-              "messages": [
-                {
-                  "role": "system",
-                  "content": "You are a helpful assistant that writes clean HTML code. Only return valid HTML without any explanation."
-                },
-                {
-                  "role": "user",
-                  "content": "Write a full HTML document for the following: ${{ github.event.inputs.prompt }} Include an <img src=\"image.png\" alt=\"AI-generated art\"> somewhere in the body. Add an internal <style> block in the <head> using the following design theme: ${{ github.event.inputs.theme }}. The CSS should include styling for layout and typography. Do not include JavaScript. Output only the HTML code."
-                }
-              ],
-              "temperature": 0.2
-            }' > response.json
+            -d @- > response.json <<EOF
+          {
+            "model": "gpt-4",
+            "messages": [
+              {
+                "role": "system",
+                "content": "You are a helpful assistant that writes clean HTML code. Only return valid HTML without any explanation."
+              },
+              {
+                "role": "user",
+                "content": "Write a full HTML document for the following: Give info about the rumored Lexus LFR speculations, like engine, transmission, price, etc. Include an <img src=\\\"image.png\\\" alt=\\\"AI-generated art\\\"> somewhere in the body. Add an internal <style> block in the <head> using the following design theme: Modern and minimalist, similar to Apple's theme. The CSS should include styling for layout and typography. Do not include JavaScript. Output only the HTML code."
+              }
+            ],
+            "temperature": 0.2
+          }
+          EOF
 
       - name: Extract HTML from response
         run: |
