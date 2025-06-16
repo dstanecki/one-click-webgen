@@ -88,7 +88,7 @@ jobs:
               },
               {
                 "role": "user",
-                "content": "Write a full HTML document based on the following prompt: ${{ github.event.inputs.prompt }} Go in detail based on online sources. Include an <img src=\"image.png\" alt=\"AI-generated art\"> somewhere in the body. Add an internal <style> block in the <head> using the following design theme: ${{ github.event.inputs.theme }}. The CSS should include styling for layout and typography. Do not include JavaScript. Output only the HTML code."
+                "content": "Write a full HTML document based on the following prompt, written substantively not structurally: ${{ github.event.inputs.prompt }} Go in detail based on online sources. Include an <img src=\"image.png\" alt=\"AI-generated art\"> somewhere in the body. Add an internal <style> block in the <head> using the following design theme: ${{ github.event.inputs.theme }}. The CSS should include styling for layout and typography. Do not include JavaScript. Output only the HTML code."
               }
             ],
             "temperature": 0.2
