@@ -117,6 +117,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # ensures full history, not just shallow clone
+      
+      - name: Pull latest changes
+        run: |
+          git pull origin main
         
       - name: Setup Pages
         uses: actions/configure-pages@v5
