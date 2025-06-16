@@ -1,0 +1,131 @@
+# Workflow to publish generated website to Azure Blob static hosting
+name: Generate website
+
+on:
+  workflow_dispatch:
+    inputs:
+      art: 
+        description: "Describe a piece of AI-generated art to include in the site"
+        required: true
+        default: "The 2026 Lexus LFR driving on a mountain road."
+      prompt:
+        description: "Describe the type of HTML page to generate"
+        required: true
+        default: "Give information on what we know or what is speculated about the upcoming Lexus LFR, including information about the engine, transmission, etc."
+      theme: 
+        description: "Describe the color scheme and theme for generating CSS"
+        default: "Modern and minimalist, similar to Apple's theme"
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+env:
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  
+jobs:
+  generate-art:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y jq curl
+        
+      - name: Call OpenAI API to generate art
+        run: |
+          curl -X POST "https://api.openai.com/v1/images/generations" \
+            -H "Authorization: Bearer $OPENAI_API_KEY" \
+            -H "Content-type: application/json" \
+            -d '{
+                "model": "gpt-image-1",
+                "prompt": "${{ github.event.inputs.art }}"
+            }' > response.json
+            
+      - name: Extract PNG image from response
+        run: |
+          jq -r '.data[0].b64_json' response.json | base64 --decode > image.png
+
+      - name: Commit and push generated PNG image
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull
+          git add image.png
+          git commit -m "Auto-generate image.png using OpenAI API" || echo "No changes to commit"
+          git push
+      
+  generate-html:
+    runs-on: ubuntu-latest
+    needs: generate-art
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y jq curl
+
+      # Currently the OpenAI API cannot browse the web; this functionality is limited only to the non-API chatGPT
+      # User prompts can't ask for data past the knowledge cutoff
+      - name: Call OpenAI API to generate HTML
+        run: |
+          curl --fail --show-error https://api.openai.com/v1/chat/completions \
+                -H "Authorization: Bearer $OPENAI_API_KEY" \
+                -H "Content-Type: application/json" \
+                -d @- > response.json <<EOF
+          {
+            "model": "gpt-4",
+            "messages": [
+              {
+                "role": "system",
+                "content": "You are a helpful assistant that gets data from the internet and writes clean, detailed, and informative HTML code. Only return valid HTML without any explanation."
+              },
+              {
+                "role": "user",
+                "content": "Write a full HTML document based on the following prompt, written substantively not structurally: ${{ github.event.inputs.prompt }} Go in detail based on online sources. Include an <img src=\"image.png\" alt=\"AI-generated art\"> somewhere in the body. Add an internal <style> block in the <head> using the following design theme: ${{ github.event.inputs.theme }}. The CSS should include styling for layout and typography. Do not include JavaScript. Output only the HTML code."
+              }
+            ],
+            "temperature": 0.2
+          }
+          EOF
+
+      - name: Extract HTML from response
+        run: |
+          jq -r '.choices[0].message.content' response.json > index.html
+
+      - name: Commit and push generated HTML
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull
+          git add index.html
+          git commit -m "Auto-generate index.html using OpenAI API" || echo "No changes to commit"
+          git push
+          
+  deploy:
+    environment:
+      #name: github-pages
+      #url: ${{ steps.deployment.outputs.page_url }}
+    needs: generate-html
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # ensures full history, not just shallow clone
+
+      # Need to pull the uploaded PNG and HTML files since the above checkout action doesn't recognize files uploaded within this pipeline
+      - name: Pull latest changes
+        run: |
+          git pull origin main
+        
+      # TO BE CONT.
