@@ -73,6 +73,8 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y jq curl
 
+      # Currently the OpenAI API cannot browse the web; this functionality is limited only to the non-API chatGPT
+      # User prompts can't ask for data past the knowledge cutoff
       - name: Call OpenAI API to generate HTML
         run: |
           curl --fail --show-error https://api.openai.com/v1/chat/completions \
@@ -119,7 +121,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # ensures full history, not just shallow clone
-      
+
+      # Need to pull the uploaded PNG and HTML files since the above checkout action doesn't recognize files uploaded within this pipeline
       - name: Pull latest changes
         run: |
           git pull origin main
