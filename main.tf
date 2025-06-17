@@ -44,3 +44,11 @@ resource "azurerm_storage_blob" "html" {
   source                 = "index.html"
   content_type           = "text/html"
 }
+
+resource "azurerm_storage_blob" "png"  {
+  name                   = "image.png"
+  storage_account_name   = azurerm_storage_account.storage.name
+  storage_container_name = "$web"
+  type                   = "Block"
+  source                 = "image.png"
+}
