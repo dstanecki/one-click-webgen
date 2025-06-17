@@ -5,13 +5,13 @@ on:
   workflow_dispatch:
     inputs:
       art: 
-        description: "Domestic duck"
+        description: "Prompt for AI-generated art"
         required: true
-        default: "The 2026 Lexus LFR driving on a mountain road."
+        default: "Domestic duck"
       prompt:
-        description: "10 fun facts about ducks"
+        description: "Prompt for HTML generation"
         required: true
-        default: "Give information on what we know or what is speculated about the upcoming Lexus LFR, including information about the engine, transmission, etc."
+        default: "10 fun facts about ducks"
       theme: 
         description: "Describe the color scheme and theme for generating CSS"
         default: "Duck theme (white and orange)"
