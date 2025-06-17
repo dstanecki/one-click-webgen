@@ -43,14 +43,7 @@ resource "azurerm_storage_blob" "html" {
   type                   = "Block"
   source                 = "index.html"
   content_type           = "text/html"
-  lifecycle {
-    replace_triggered_by = [
-      filesha256("index.html")
-    ]
-  }
-  metadata = {
-    last_updated = timestamp()
-  }
+  metadata = { force_update = timestamp() }
 }
 
 resource "azurerm_storage_blob" "png"  {
@@ -59,12 +52,5 @@ resource "azurerm_storage_blob" "png"  {
   storage_container_name = "$web"
   type                   = "Block"
   source                 = "image.png"
-  lifecycle {
-    replace_triggered_by = [
-      filesha256("image.png")
-    ]
-  }
-  metadata = {
-    last_updated = timestamp()
-  }
+  metadata = { force_update = timestamp() }
 }
