@@ -1,0 +1,100 @@
+# Generates AI image and HTML without deploying
+# For use as the first module in a Workflow
+name: Generate Site
+
+on:
+  workflow_call:
+    inputs:
+      art:
+        required: false
+        type: string
+        default: "Domestic duck"
+      prompt:
+        required: false
+        type: string
+        default: "10 fun facts about ducks"
+      theme:
+        required: false
+        type: string
+        default: "Duck theme (white and orange)"
+    secrets:
+      OPENAI_API_KEY:
+        required: true
+
+jobs:
+  generate-art:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y jq curl
+        
+      - name: Call OpenAI API to generate art
+        run: |
+          curl -X POST "https://api.openai.com/v1/images/generations" \
+            -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}" \
+            -H "Content-type: application/json" \
+            -d '{
+                "model": "gpt-image-1",
+                "prompt": "${{ inputs.art }}"
+            }' > response.json
+            
+      - name: Extract PNG image from response
+        run: |
+          jq -r '.data[0].b64_json' response.json | base64 --decode > image.png
+
+      - name: Commit and push generated PNG image
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull
+          git add image.png
+          git commit -m "Auto-generate image.png using OpenAI API" || echo "No changes to commit"
+          git push
+
+  generate-html:
+    runs-on: ubuntu-latest
+    needs: generate-art
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y jq curl
+
+      - name: Call OpenAI API to generate HTML
+        run: |
+          curl --fail --show-error https://api.openai.com/v1/chat/completions \
+                -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}" \
+                -H "Content-Type: application/json" \
+                -d @- > response.json <<EOF
+          {
+            "model": "gpt-4",
+            "messages": [
+              {
+                "role": "system",
+                "content": "You are a helpful assistant that gets data from the internet and writes clean, detailed, and informative HTML code. Only return valid HTML without any explanation."
+              },
+              {
+                "role": "user",
+                "content": "Write a full HTML document based on the following prompt, written substantively not structurally: ${{ inputs.prompt }} Go in detail based on online sources. Include an <img src=\"image.png\" alt=\"AI-generated art\"> somewhere in the body. Add an internal <style> block in the <head> using the following design theme: ${{ inputs.theme }}. The CSS should include styling for layout and typography. Do not include JavaScript. Output only the HTML code."
+              }
+            ],
+            "temperature": 0.2
+          }
+          EOF
+
+      - name: Extract HTML from response
+        run: |
+          jq -r '.choices[0].message.content' response.json > index.html
+
+      - name: Commit and push generated HTML
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull
+          git add index.html
+          git commit -m "Auto-generate index.html using OpenAI API" || echo "No changes to commit"
+          git push
