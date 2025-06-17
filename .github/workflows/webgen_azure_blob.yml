@@ -1,5 +1,5 @@
 # Workflow to publish generated website to Azure Blob static hosting
-name: Azure: Generate website
+name: Azure generate website
 
 on:
   workflow_dispatch:
