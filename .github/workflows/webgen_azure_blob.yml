@@ -5,16 +5,16 @@ on:
   workflow_dispatch:
     inputs:
       art: 
-        description: "Describe a piece of AI-generated art to include in the site"
+        description: "Domestic duck"
         required: true
         default: "The 2026 Lexus LFR driving on a mountain road."
       prompt:
-        description: "Describe the type of HTML page to generate"
+        description: "10 fun facts about ducks"
         required: true
         default: "Give information on what we know or what is speculated about the upcoming Lexus LFR, including information about the engine, transmission, etc."
       theme: 
         description: "Describe the color scheme and theme for generating CSS"
-        default: "Modern and minimalist, similar to Apple's theme"
+        default: "Duck theme (white and orange)"
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
