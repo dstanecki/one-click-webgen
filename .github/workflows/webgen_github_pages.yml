@@ -1,5 +1,5 @@
 # Workflow to publish generated website to GitHub Pages static hosting
-name: Generate website
+name: GitHub Pages generate website
 
 on:
   workflow_dispatch:
