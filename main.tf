@@ -43,6 +43,9 @@ resource "azurerm_storage_blob" "html" {
   type                   = "Block"
   source                 = "index.html"
   content_type           = "text/html"
+  metadata = {
+    last_updated = timestamp()
+  }
 }
 
 resource "azurerm_storage_blob" "png"  {
@@ -51,4 +54,7 @@ resource "azurerm_storage_blob" "png"  {
   storage_container_name = "$web"
   type                   = "Block"
   source                 = "image.png"
+  metadata = {
+    last_updated = timestamp()
+  }
 }
