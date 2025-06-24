@@ -22,7 +22,7 @@ Before using this project, ensure the following:
   - Go to your repository > Settings > Secrets and variables > Actions.
   - Add a new secret named `OPENAI_API_KEY`.
 
-### **How It Works**
+## **How It Works**
 
 - You configure your Azure API credentials and OpenAI API key/credits ($$)
 - You enter a prompt to generate AI art, a prompt to generate the website text content, and a prompt to describe what the visual theme should be.
